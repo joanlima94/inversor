@@ -1,79 +1,50 @@
-/* Data de submissao:
+/* Data de submissao: 15/03/2020
  * Nome: Joan Lima Rios
  * RA: 175870
  */
 
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 const int tam_buffer=100;
-int n_elem = 0;
-char buffer[100];
-/*
-char *inverte (char *c) //Função que inverte as letras de uma palavra
-{
-  char aux1;
-  int i,tam=strlen(c),j;
-  int tam_palavra=0,conta_letra=0,posicao=0;
-  while (conta_letra<strlen(c))
-  {
-    if ((c[conta_letra]==' ') || (c[conta_letra]=='\0'))
-    {
-      tam_palavra = posicao;
-      for(i=0, j = tam_palavra;i<j;i++,j--)
-      {
-        aux1 = c[i];
-        c[i] = c[j];
-        c[j] = aux1;
-      }
-      posicao = 0;
-    }
-
-    conta_letra++;
-    posicao++;
-  }
-    return c;
-}
-*/
-void coloca(char c)
-{
-  if(n_elem < tam_buffer)
-  {
-    buffer[n_elem] = c;
-    n_elem++;
-  }
-}
-
-char retira()
-{
-  char c;
-  if (n_elem>0)
-  {
-    n_elem--;
-    c = buffer[n_elem];
-  }
-  return c;
-}
-
 int main()
 {
-  int cont=0,flag =0, guarda = 0, coluna=0;
-  char c,pilha[tam_buffer];
-  int i=0;
+  char buffer[tam_buffer], aux_troca;
+  fgets(buffer,tam_buffer,stdin);
+  int i=0,j=0,k=0;//tam = strlen(buffer);
 
-  fgets(buffer, tam_buffer, stdin);
-
-  for (i = 0; i < strlen(buffer); i++)
+  int tam = strlen(buffer) - 1;
+  if (buffer[tam] == '\n') buffer[tam] = '\0';
+  //Aqui precisei fazer uma verificação para retirar o \n no final da string
+  //Pois o fgets é sensivel ao enter
+  for(i=0;i<tam;i++)
   {
-      coloca(buffer[i]);
+    if ((!isalnum(buffer[i])) || (i == tam-1))
+    //verifica se o caracter inserido é letra inserida ou é número ou se já chegou na ultima letra da string
+    {
+      if(i < tam - 1)
+    //Para o caso de não ter chegado na última letra, salva as posições dos espaços
+      {
+        k = i - 1;
+      } else
+    //Caso tenha chegado na última letra, armazena sua posição
+      {
+        k = i;
+      }
+      while (j<k)
+    //laço para inverter as letras de palavra por palavra
+      {
+        aux_troca = buffer[j];
+        buffer[j] = buffer[k];
+        buffer[k] = aux_troca;
+        j++;
+        k--;
+      }
+      j = i + 1;
+    }
   }
-  for (i = 0; i < strlen(buffer); i++)
-  {
-    c = retira();
-    printf("%c",c);
-  }
 
-
-
+  printf("%s\n",buffer);
   return 0;
 }
